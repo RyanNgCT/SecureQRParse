@@ -33,6 +33,9 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
     except PIL.UnidentifiedImageError:
         return "File supplied is not a valid image or QR Code.", False
     else:
+        if fileExif == []:
+             return "File is not/does not contain a QR Code.", False
+
         # check type of image and if data field exists
         if fileExif[0].type == "QRCODE" and fileExif[0].data:
             rawData = fileExif[0].data.decode()
@@ -68,7 +71,7 @@ def upload_file() -> str:
         retStr, isValidUrl = parseSingleQR(fullPath)
 
         if isValidUrl:
-            finalStr = f"Url: {retStr}"
+            finalStr = f"Defanged URL: {retStr}"
             return render_template('response.html', displayStr=finalStr)
         else:
             return render_template('response.html', displayStr=retStr)
