@@ -1,4 +1,4 @@
-# SecureQRParse-CLI
+# SecureQRParse
 
 - Python Script to extract urls and defang them from QR Codes.
 - Command-Line Tool Interface _for now_ (can use `--file` or `--directory` to extract urls from a given file/directory).

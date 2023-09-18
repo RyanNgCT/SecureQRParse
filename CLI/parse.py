@@ -27,7 +27,7 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
 
 def parseQRsInDir(dirPath : Path) -> list[str]:
     """ based on a directory, enumerate over its file contents and run 
-        parseSingleQR() => to make recursive """
+        parseSingleQR(), recursive, if there are subdirectories """
     
     def parseDir(path : Path) -> set[str]:
         allExtractedUrls = {} # maybe for future use
@@ -83,7 +83,7 @@ def main() -> None:
             sys.exit("Specified location is not a directory / does not exist.")
     
     if args.directory or isValidUrl:
-        print("Url(s): ", retStr)
+        print("Url(s), exclude duplicate: ", retStr)
     else:
         print(retStr)
 
