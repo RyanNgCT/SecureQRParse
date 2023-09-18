@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure QR Parse</title>
-    <link rel="stylesheet" type="text/css" href="/static/src/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </head>
 <body>
-    <h1>Upload a QR Code to Scan:</h1>
-    <p class="italicStyle">Allowed file types: png, jpg, jpeg, gif</p>
-    <form method="POST" enctype="multipart/form-data" action="/upload">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
-    </form>
+    <div class="py-8 px-8">
+        <h1 class="text-3xl font-bold underline pb-2">Upload a QR Code to Scan:</h1>
+        <p class="italic">Allowed file types: png, jpg, jpeg, gif</p>
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+            <input type="file" name="file">
+            <input type="submit" value="Upload" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+        </form>
+    </div>
 </body>
 </html>
