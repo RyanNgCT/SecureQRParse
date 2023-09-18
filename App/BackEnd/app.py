@@ -4,6 +4,7 @@ from PIL import Image
 from pyzbar.pyzbar import decode
 from pathlib import Path
 import re, os
+from http.client import responses
 
 template_dir = os.path.abspath('../FrontEnd/templates')
 static_dir = os.path.abspath('../FrontEnd/static')
@@ -49,13 +50,11 @@ def upload_form() -> dict: # returns response object
 
 @app.route('/upload', methods=['POST'])
 def upload_file() -> str:
-    if 'file' not in request.files:
-        return redirect(request.url)
-
     file = request.files['file']
-
-    if file.filename == '':
-        return redirect(request.url)
+    if 'file' not in request.files or file.filename == '':
+        retObj = redirect(request.url)
+        msg = f"{retObj.status_code} - {responses[retObj.status_code]}"
+        return render_template('response.html', displayStr=msg)
 
     if file and allowed_file(file.filename):
         # Ensure the 'uploads' directory exists
@@ -69,11 +68,18 @@ def upload_file() -> str:
         retStr, isValidUrl = parseSingleQR(fullPath)
 
         if isValidUrl:
-            return f"Url: {retStr}"
+            finalStr = f"Url: {retStr}"
+            return render_template('response.html', displayStr=finalStr)
         else:
-            return f"{retStr}"
+            return render_template('response.html', displayStr=retStr)
 
-    return 'Invalid file type (allowed extensions: jpg, jpeg, png, gif)!'
+    return render_template('response.html', displayStr ='Invalid file type! Allowed extensions: jpg, jpeg, png, gif.')
+
+
+@app.route('/<path:catch_all>')
+def catch_all(catch_all) -> None:
+    return render_template('404.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
