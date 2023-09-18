@@ -2,7 +2,7 @@ import PIL
 from PIL import Image
 from pyzbar.pyzbar import decode
 from pathlib import Path
-import argparse, sys, re
+import argparse, sys, re, os
 
 
 def parseSingleQR(file : Path) -> tuple[str, bool]:
@@ -28,24 +28,28 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
 def parseQRsInDir(dirPath : Path) -> list[str]:
     """ based on a directory, enumerate over its file contents and run 
         parseSingleQR() => to make recursive """
+    
+    def parseDir(path : Path) -> set[str]:
+        allExtractedUrls = {} # maybe for future use
+        extractedUrls = [] # list of defanged urls to be returned
+        validUrls = 0  # counter for valid URLs
+        index = 1
 
-    allExtractedUrls = {} # maybe for future use
-    extractedUrls = [] # list of defanged urls to be returned
-    validUrls = 0  # counter for valid URLs
-    index = 1
-    totalFiles = len(list(dirPath.rglob("*"))) # total number of files for target directory
-    for file in dirPath.rglob("*"):
-        if file is not None:
-            result, isValidUrl = parseSingleQR(file)
-            allExtractedUrls[index] = result
-            if isValidUrl:
-                validUrls += 1
-                extractedUrls.append(result)
-            index += 1
+        for root, _, files in os.walk(path):
+            for file in files:
+                filePath = os.path.join(root, file)
+                result, isValidUrl = parseSingleQR(filePath)
+                allExtractedUrls[index] = result
+                if isValidUrl:
+                    validUrls += 1
+                    extractedUrls.append(result)
+                index += 1
 
-    print(f"[INFO]: Decoded {validUrls} of {totalFiles} files at location: '{dirPath.resolve()}'")
+        # displays validUrls out of totalUrls
+        print(f"[INFO]: Decoded {validUrls} of {index - 1} files at location: '{path.resolve()}'\n")
+        return list(set(extractedUrls)) # remove duplicate urls, if any
 
-    return list(set(extractedUrls)) # remove duplicate urls, if any
+    return parseDir(dirPath)
 
 
 def defangURL(rawUrl : str) -> str:
