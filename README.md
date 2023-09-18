@@ -6,4 +6,5 @@
 ## Possible To-dos
 
 - [x] allow for recursive search (depth > 1) when looking at files in subdirectories/subfolders, while using the `--directory` flag.
-- [ ] convert and host python script as an interactive Flask Web-App.
+- [x] convert and host python script as an interactive Flask Web-App.
+- [ ] security mechanisms for Flask Web-App.

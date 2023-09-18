@@ -5,10 +5,11 @@ from pyzbar.pyzbar import decode
 from pathlib import Path
 import re, os
 
-template_dir = os.path.abspath('../FrontEnd')
+template_dir = os.path.abspath('../FrontEnd/templates')
+static_dir = os.path.abspath('../FrontEnd/static')
 
 # allow for files to be imported from other folder
-app = Flask(__name__, template_folder=template_dir)
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
