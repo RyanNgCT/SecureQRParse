@@ -37,7 +37,7 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
         return "File supplied is not a valid image or QR Code.", False
     else:
         if fileExif == []:
-             return "File is not/does not contain a QR Code.", False
+             return "File either is not or does not contain valid a QR Code.", False
 
         # check type of image and if data field exists
         if fileExif[0].type == "QRCODE" and fileExif[0].data:
@@ -47,7 +47,7 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
                 return defangURL(rawData), True
             else:
                 return "No url detected in QR Code.", False
-        return "File is not/does not contain a QR Code.", False
+        return "File either is not or does not contain valid a QR Code.", False
 
 
 @app.route('/')
