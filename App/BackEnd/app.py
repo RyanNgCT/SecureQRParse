@@ -23,6 +23,9 @@ def allowed_file(filename : str) -> bool:
 def defangURL(rawUrl : str) -> str:
     return rawUrl.replace(".", "[.]").replace("http", "hxxp")
 
+def refangURL(rawUrl : str) -> str:
+    return rawUrl.replace("hxxp", "http").replace("[.]", ".")
+
 
 def parseSingleQR(file : Path) -> tuple[str, bool]:
     """ based on a file, determine if whether the file contains a valid QR Code 
@@ -51,6 +54,7 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
 def upload_form() -> dict: # returns response object
     return render_template('index.html')
 
+
 @app.route('/upload', methods=['POST'])
 def upload_file() -> str:
     file = request.files['file']
@@ -72,7 +76,9 @@ def upload_file() -> str:
 
         if isValidUrl:
             finalStr = f"Defanged URL: {retStr}"
-            return render_template('response.html', displayStr=finalStr)
+            rawUri=refangURL(retStr)
+            print(rawUri)
+            return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri)
         else:
             return render_template('response.html', displayStr=retStr)
 
