@@ -5,6 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Secure QR Parse</title>
         <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+        <script>
+            // JavaScript to toggle the collapsible content
+            function toggleCollapsible() {
+                var content = document.querySelector('.content');
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                } else {
+                    content.style.display = 'block';
+                }
+            }
+        </script>
     </head>
     <body>
         <h1 class="flex justify-center py-3 px-4 text-2xl font-bold underline pb-1">Result</h1>
@@ -13,14 +24,36 @@
                 {{ displayStr }}
             </div>
         </div>
+        {% if exception %}
         <div class="flex justify-center py-2 px-4">
             <div class="flex justify-center">
                 <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mt-2 m-auto mr-1"><a href="{{ url_for('upload_form') }}">Back to Home Page</a></button>
-                <!-- need to only display if url valid -->
-                {% if condition %}
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mt-2 m-auto ml-1"><a href="{{ rawUri }}">Open Link in New Tab</a></button>
-                {% endif %}
             </div>
         </div>
+        {% endif %}
+        {% if condition %}
+        <div class="w-full flex justify-center">
+            <div class="w-7/12 block py-2 px-4">
+                <button onclick="toggleCollapsible()" class="w-full bg-gray-500 text-center text-white m-auto justify-center collapsible font-bold">
+                    Further Actions
+                </button>
+                <div class="hidden content m-auto">
+                    <div class="justify-center bg-gray-300 p-4">
+                        <div class="text-center"> <!-- Centered container for text -->
+                            <p class="text-center italic">Do you want to proceed to visit the URL or go back?</p>
+                        </div>
+                        <div class="flex justify-center"> <!-- Centered container for buttons -->
+                            <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full m-2">
+                                <a href="{{ url_for('upload_form') }}">Back to Home Page</a>
+                            </button>
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2">
+                                <a href="{{ rawUri }}" target="_blank">Open Link in New Tab</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </body>
 </html>

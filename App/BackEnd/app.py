@@ -61,7 +61,8 @@ def upload_file() -> str:
     if 'file' not in request.files or file.filename == '':
         retObj = redirect(request.url)
         msg = f"{retObj.status_code} - {responses[retObj.status_code]}"
-        return render_template('response.html', displayStr=msg)
+        exception = True
+        return render_template('response.html', displayStr=msg, exception=exception)
 
     if file and allowed_file(file.filename):
         # Ensure the 'uploads' directory exists
@@ -80,10 +81,10 @@ def upload_file() -> str:
             print(rawUri)
             return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri)
         else:
-            return render_template('response.html', displayStr=retStr)
-
-    return render_template('response.html', displayStr ='Invalid file type! Allowed extensions: jpg, jpeg, png, gif.')
-
+            exception = True
+            return render_template('response.html', displayStr=retStr, exception=exception)
+    exception = True
+    return render_template('response.html', displayStr ='Invalid file type! Allowed extensions: jpg, jpeg, png, gif.', exception=exception)
 
 @app.route('/<path:catch_all>')
 def catch_all(catch_all) -> None:
