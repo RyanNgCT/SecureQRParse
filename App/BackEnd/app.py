@@ -1,10 +1,8 @@
 from flask import Flask, request, render_template, redirect
-import PIL
-from PIL import Image
-from pyzbar.pyzbar import decode
 from pathlib import Path
-import re, os, magic
+import os, magic
 from http.client import responses
+from ..Components.parseqr import parseSingleQR
 
 template_dir = os.path.abspath('../FrontEnd/templates')
 static_dir = os.path.abspath('../FrontEnd/static')
@@ -24,36 +22,8 @@ def allowed_file(file) -> bool:
     return detectedMimeType in ALLOWED_MIME_TYPES
 
 
-def defangURL(rawUrl : str) -> str:
-    return rawUrl.replace(".", "[.]").replace("http", "hxxp")
-
-
 def refangURL(rawUrl : str) -> str:
     return rawUrl.replace("hxxp", "http").replace("[.]", ".")
-
-
-def parseSingleQR(file : Path) -> tuple[str, bool]:
-    """ based on a file, determine if whether the file contains a valid QR Code 
-        and return the corresponding URL, if any, defanged. """
-    
-    try:
-        fileExif = decode(Image.open(file))
-    except PIL.UnidentifiedImageError:
-        return "File supplied is not a valid image or QR Code.", False
-    else:
-        if fileExif == []:
-             return "File either is not or does not contain valid a QR Code.", False
-
-        # check type of image and if data field exists
-        if fileExif[0].type == "QRCODE" and fileExif[0].data:
-            rawData = fileExif[0].data.decode()
-            uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
-            if re.match(uri_pattern, rawData):
-                return defangURL(rawData), True
-            else:
-                return "No url detected in QR Code.", False
-        return "File either is not or does not contain valid a QR Code.", False
-
 
 @app.route('/')
 def upload_form() -> dict: # returns response object
@@ -76,7 +46,6 @@ def upload_file() -> str:
         # Save the uploaded file to the 'uploads' directory
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 
-        # Process the uploaded image as needed (e.g., display it)
         fullPath = Path(app.config['UPLOAD_FOLDER'] + os.sep + file.filename)
         retStr, isValidUrl = parseSingleQR(fullPath)
 
