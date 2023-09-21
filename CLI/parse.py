@@ -3,6 +3,7 @@ from PIL import Image
 from pyzbar.pyzbar import decode
 from pathlib import Path
 import argparse, sys, re, os
+import magic
 
 
 def parseSingleQR(file : Path) -> tuple[str, bool]:
@@ -32,27 +33,24 @@ def parseQRsInDir(dirPath : Path) -> list[str]:
     """ based on a directory, enumerate over its file contents and run 
         parseSingleQR(), recursive, if there are subdirectories """
     
-    def parseDir(path : Path) -> set[str]:
-        allExtractedUrls = {} # maybe for future use
-        extractedUrls = [] # list of defanged urls to be returned
-        validUrls = 0  # counter for valid URLs
-        index = 1
+    allExtractedUrls = {} # maybe for future use
+    extractedUrls = [] # list of defanged urls to be returned
+    validUrls = 0  # counter for valid URLs
+    index = 1
 
-        for root, _, files in os.walk(path):
-            for file in files:
-                filePath = os.path.join(root, file)
-                result, isValidUrl = parseSingleQR(filePath)
-                allExtractedUrls[index] = result
-                if isValidUrl:
-                    validUrls += 1
-                    extractedUrls.append(result)
-                index += 1
+    for root, _, files in os.walk(dirPath):
+        for file in files:
+            filePath = os.path.join(root, file)
+            result, isValidUrl = parseSingleQR(filePath)
+            allExtractedUrls[index] = result
+            if isValidUrl:
+                validUrls += 1
+                extractedUrls.append(result)
+            index += 1
 
-        # displays validUrls out of totalUrls
-        print(f"[INFO]: Decoded {validUrls} of {index - 1} files at location: '{path.resolve()}'\n")
-        return list(set(extractedUrls)) # remove duplicate urls, if any
-
-    return parseDir(dirPath)
+    # displays validUrls out of totalUrls
+    print(f"[INFO]: Decoded {validUrls} of {index - 1} files at location: '{dirPath.resolve()}'\n")
+    return list(set(extractedUrls)) # remove duplicate urls, if any
 
 
 def defangURL(rawUrl : str) -> str:
@@ -60,7 +58,7 @@ def defangURL(rawUrl : str) -> str:
 
 
 def main() -> None:
-    argDesc = '''SecureQRParse v0.2, (c) RyanNgCT, 2023'''
+    argDesc = '''SecureQRParse v0.3, (c) RyanNgCT, 2023'''
     parser = argparse.ArgumentParser(formatter_class = argparse.RawDescriptionHelpFormatter, description=argDesc)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-f", "--file", help="File to be parsed.")

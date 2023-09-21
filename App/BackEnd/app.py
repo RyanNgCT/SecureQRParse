@@ -78,7 +78,6 @@ def upload_file() -> str:
         if isValidUrl:
             finalStr = f"Defanged URL: {retStr}"
             rawUri=refangURL(retStr)
-            print(rawUri)
             return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri)
         else:
             exception = True

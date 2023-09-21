@@ -20,7 +20,7 @@
     <body>
         <h1 class="flex justify-center py-3 px-4 text-2xl font-bold underline pb-1">Result</h1>
         <div class="flex justify-center py-3 px-4">
-            <div class="italic text-center">
+            <div class="italic text-center text-semibold">
                 {{ displayStr }}
             </div>
         </div>
@@ -34,7 +34,7 @@
         {% if condition %}
         <div class="w-full flex justify-center">
             <div class="w-7/12 block py-2 px-4">
-                <button onclick="toggleCollapsible()" class="w-full bg-gray-500 text-center text-white m-auto justify-center collapsible font-bold">
+                <button onclick="toggleCollapsible()" class="w-full bg-gray-500 text-center text-white m-auto justify-center collapsible font-bold bg-downarrow top-0 left-0 bg-no-repeat">
                     Further Actions
                 </button>
                 <div class="hidden content m-auto">
