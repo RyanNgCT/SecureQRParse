@@ -33,20 +33,20 @@
         {% endif %}
         {% if condition %}
         <div class="w-full flex justify-center">
-            <div class="w-7/12 block py-2 px-4">
+            <div class="w-8/12 block py-2 px-4">
                 <button onclick="toggleCollapsible()" class="w-full bg-gray-500 text-center text-white m-auto justify-center collapsible font-bold bg-downarrow top-0 left-0 bg-no-repeat">
                     Further Actions
                 </button>
                 <div class="hidden content m-auto">
                     <div class="justify-center bg-gray-300 p-4">
                         <div class="text-center"> <!-- Centered container for text -->
-                            <p class="text-center italic">Do you want to proceed to visit the URL or go back?</p>
+                            <p class="text-center italic text-sm sm:text-base">Do you want to proceed to visit the URL or go back?</p>
                         </div>
-                        <div class="flex justify-center"> <!-- Centered container for buttons -->
-                            <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full m-2">
+                        <div class="flex justify-center flex-col sm:flex-row"> <!-- Centered container for buttons -->
+                            <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
                                 <a href="{{ url_for('upload_form') }}">Back to Home Page</a>
                             </button>
-                            <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2">
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
                                 <a href="{{ rawUri }}" target="_blank">Open Link in New Tab</a>
                             </button>
                         </div>
