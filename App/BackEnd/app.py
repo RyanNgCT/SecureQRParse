@@ -3,7 +3,7 @@ import PIL
 from PIL import Image
 from pyzbar.pyzbar import decode
 from pathlib import Path
-import re, os
+import re, os, magic
 from http.client import responses
 
 template_dir = os.path.abspath('../FrontEnd/templates')
@@ -16,12 +16,17 @@ UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Function to check for allowed image extensions
-def allowed_file(filename : str) -> bool:
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png', 'gif'}
+def allowed_file(file) -> bool:
+    ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png', 'image/gif'}
+    mime = magic.Magic(mime=True)
+    detectedMimeType = mime.from_buffer(file.read(512))  # Read the first 512 bytes to determine the MIME type
+    file.seek(0)
+    return detectedMimeType in ALLOWED_MIME_TYPES
 
 
 def defangURL(rawUrl : str) -> str:
     return rawUrl.replace(".", "[.]").replace("http", "hxxp")
+
 
 def refangURL(rawUrl : str) -> str:
     return rawUrl.replace("hxxp", "http").replace("[.]", ".")
@@ -64,7 +69,7 @@ def upload_file() -> str:
         exception = True
         return render_template('response.html', displayStr=msg, exception=exception)
 
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file):
         # Ensure the 'uploads' directory exists
         os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
