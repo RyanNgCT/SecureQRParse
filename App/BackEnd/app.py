@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect
 from pathlib import Path
 import os, magic
 from http.client import responses
-from ..Components.parseqr import parseSingleQR
+from App.Components.parseqr import parseSingleQR
 
 template_dir = os.path.abspath('../FrontEnd/templates')
 static_dir = os.path.abspath('../FrontEnd/static')
