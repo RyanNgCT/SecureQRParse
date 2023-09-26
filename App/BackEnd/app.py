@@ -65,4 +65,4 @@ def catch_all(catch_all) -> None:
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

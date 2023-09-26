@@ -14,6 +14,7 @@ def parseQRsInDir(dirPath : Path) -> list[str]:
     for root, _, files in os.walk(dirPath):
         for file in files:
             filePath = os.path.join(root, file)
+            filePath = Path(filePath)
             result, isValidUrl = parseSingleQR(filePath)
             allExtractedUrls[index] = result
             if isValidUrl:

@@ -3,6 +3,7 @@ from PIL import Image
 from pyzbar.pyzbar import decode
 from pathlib import Path
 import re
+import cv2
 
 def parseSingleQR(file : Path) -> tuple[str, bool]:
     """ based on a file, determine if whether the file contains a valid QR Code 
@@ -14,7 +15,17 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
         return "File supplied is not a valid image or QR Code.", False
     else:
         if fileExif == []:
-             return "File either is not or does not contain valid a QR Code.", False
+            img = cv2.imread(str(file.resolve()))
+            opencvQRDetect = cv2.QRCodeDetector()
+            retVal, decodedInfo, _, _ = opencvQRDetect.detectAndDecodeMulti(img)
+            # print('cv2 decoded: ', retVal, decodedInfo)
+
+            # QR Code not present in image
+            if not retVal:
+                return "File either is not or does not contain valid a QR Code.", False
+            else:
+                # not fully implemented -> detected by cv2 but not pyzbar
+                return decodedInfo, True
 
         # check type of image and if data field exists
         if fileExif[0].type == "QRCODE" and fileExif[0].data:

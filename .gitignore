@@ -3,3 +3,4 @@ qrparse
 __pycache__/
 uploads
 node_modules/
+serve_app.py
