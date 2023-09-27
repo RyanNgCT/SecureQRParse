@@ -14,18 +14,22 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
     except PIL.UnidentifiedImageError:
         return "File supplied is not a valid image or QR Code.", False
     else:
+        # print(fileExif)
         if fileExif == []:
             img = cv2.imread(str(file.resolve()))
             opencvQRDetect = cv2.QRCodeDetector()
-            retVal, decodedInfo, _, _ = opencvQRDetect.detectAndDecodeMulti(img)
-            # print('cv2 decoded: ', retVal, decodedInfo)
+            retVal, decodedInfo, _ , _ = opencvQRDetect.detectAndDecodeMulti(img)
 
             # QR Code not present in image
             if not retVal:
+                # print('cv2 decoded: ', retVal, decodedInfo)
                 return "File either is not or does not contain valid a QR Code.", False
             else:
-                # not fully implemented -> detected by cv2 but not pyzbar
-                return decodedInfo, True
+                # print('cv2 decoded: ', retVal, decodedInfo[0])
+                uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
+                if re.match(uri_pattern, decodedInfo[0]): # not sure if need change index
+                    return defangURL(decodedInfo[0]), True
+                return "No url detected in QR Code.", False
 
         # check type of image and if data field exists
         if fileExif[0].type == "QRCODE" and fileExif[0].data:
@@ -33,8 +37,7 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
             uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
             if re.match(uri_pattern, rawData):
                 return defangURL(rawData), True
-            else:
-                return "No url detected in QR Code.", False
+            return "No url detected in QR Code.", False
         return "File either is not or does not contain valid a QR Code.", False
     
 
