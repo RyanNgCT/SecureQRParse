@@ -46,9 +46,22 @@
                             <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
                                 <a href="{{ url_for('upload_form') }}">Back to Home Page</a>
                             </button>
+                            {% if rawUri%}
                             <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
                                 <a href="{{ rawUri }}" target="_blank">Open Link in New Tab</a>
                             </button>
+                            {% endif %}
+                            {% if urlList%}
+                            <ul>
+                                {% for item in urlList %}
+                                    <li>
+                                        <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
+                                            <a href="{{ item }}" target="_blank">Open Link in New Tab</a>
+                                        </button>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

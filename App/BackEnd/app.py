@@ -50,9 +50,17 @@ def upload_file() -> str:
         retStr, isValidUrl = parseSingleQR(fullPath)
 
         if isValidUrl:
-            finalStr = f"Defanged URL: {retStr}"
-            rawUri=refangURL(retStr)
-            return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri)
+            rawUri = ''
+            urlList = []
+            finalStr = f"Defanged URL: "
+            if isinstance(retStr, str):
+                finalStr += retStr
+                rawUri = refangURL(retStr)
+            elif isinstance(retStr, list):
+                for element in retStr:
+                    finalStr += refangURL(element) + "\n"
+                    urlList.append(refangURL(element))
+            return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri, urlList=urlList)
         else:
             exception = True
             return render_template('response.html', displayStr=retStr, exception=exception)

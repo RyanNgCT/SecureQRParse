@@ -17,7 +17,11 @@ def parseQRsInDir(dirPath : Path) -> list[str]:
             filePath = Path(filePath)
             result, isValidUrl = parseSingleQR(filePath)
             allExtractedUrls[index] = result
-            if isValidUrl:
+            if isinstance(result, list):
+                for url in result:
+                    extractedUrls.append(url)
+                validUrls += 1 # only add 1 to count -> multiple QRs in single image
+            elif isValidUrl:
                 validUrls += 1
                 extractedUrls.append(result)
             index += 1

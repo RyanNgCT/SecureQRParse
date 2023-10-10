@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 import cv2
 
-def parseSingleQR(file : Path) -> tuple[str, bool]:
+def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
     """ based on a file, determine if whether the file contains a valid QR Code 
         and return the corresponding URL, if any, defanged. """
     
@@ -31,8 +31,20 @@ def parseSingleQR(file : Path) -> tuple[str, bool]:
                     return defangURL(decodedInfo[0]), True
                 return "No url detected in QR Code.", False
 
-        # check type of image and if data field exists
-        if fileExif[0].type == "QRCODE" and fileExif[0].data:
+        # multiple QR codes in single image
+        if len(fileExif) > 1:
+            rawDataList = []
+            for itr in range(len(fileExif)):
+                if fileExif[itr].data and fileExif[itr].type == "QRCODE":
+                    rawData = fileExif[itr].data.decode()
+                    uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
+                    if re.match(uri_pattern, rawData):
+                        rawDataList.append(defangURL(rawData))
+            if rawDataList != []:
+                return rawDataList, True
+
+         # check type of image and if data field exists
+        elif fileExif[0].type == "QRCODE" and fileExif[0].data:
             rawData = fileExif[0].data.decode()
             uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
             if re.match(uri_pattern, rawData):
