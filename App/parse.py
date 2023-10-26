@@ -32,7 +32,7 @@ def parseQRsInDir(dirPath : Path) -> list[str]:
 
 
 def main() -> None:
-    argDesc = '''SecureQRParse v0.3, (c) RyanNgCT, 2023'''
+    argDesc = '''SecureQRParse v0.5, (c) RyanNgCT, 2023'''
     parser = argparse.ArgumentParser(formatter_class = argparse.RawDescriptionHelpFormatter, description=argDesc)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-f", "--file", help="File to be parsed.")
