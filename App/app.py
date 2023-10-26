@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template, redirect
 from pathlib import Path
-import os, magic
+import os, magic, platform
 from http.client import responses
-from Components.parseqr import parseSingleQR
+
+if platform.system() == 'Windows':
+    from App.Components.parseqr import parseSingleQR
+else:
+    from Components.parseqr import parseSingleQR
 
 template_dir = os.path.abspath('./FrontEnd/templates')
 static_dir = os.path.abspath('./FrontEnd/static')
