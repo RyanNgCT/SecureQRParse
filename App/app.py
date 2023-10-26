@@ -4,8 +4,8 @@ import os, magic
 from http.client import responses
 from App.Components.parseqr import parseSingleQR
 
-template_dir = os.path.abspath('../FrontEnd/templates')
-static_dir = os.path.abspath('../FrontEnd/static')
+template_dir = os.path.abspath('./FrontEnd/templates')
+static_dir = os.path.abspath('./FrontEnd/static')
 
 # allow for files to be imported from other folder
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
@@ -58,7 +58,7 @@ def upload_file() -> str:
                 rawUri = refangURL(retStr)
             elif isinstance(retStr, list):
                 for element in retStr:
-                    finalStr += refangURL(element) + "\n"
+                    finalStr += refangURL(element) + "\t"
                     urlList.append(refangURL(element))
             return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri, urlList=urlList)
         else:
