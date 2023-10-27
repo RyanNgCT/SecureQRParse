@@ -42,27 +42,31 @@
                         <div class="text-center"> <!-- Centered container for text -->
                             <p class="text-center italic text-sm sm:text-base">Do you want to proceed to visit the URL or go back?</p>
                         </div>
-                        <div class="flex justify-center flex-col sm:flex-row"> <!-- Centered container for buttons -->
-                            <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
+                        {% if rawUri%}
+                        <div class="flex justify-center flex-col"> <!-- Centered container for buttons -->
+                            <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base">
                                 <a href="{{ url_for('upload_form') }}">Back to Home Page</a>
                             </button>
-                            {% if rawUri%}
-                            <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base">
                                 <a href="{{ rawUri }}" target="_blank">Open Link in New Tab</a>
                             </button>
-                            {% endif %}
-                            {% if urlList%}
+                        {% endif %}
+                        {% if urlList%}
+                        <div class="flex justify-center flex-col">
+                            <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base w-full">
+                                <a href="{{ url_for('upload_form') }}">Back to Home Page</a>
+                            </button>
                             <ul>
                                 {% for item in urlList %}
                                     <li>
-                                        <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full m-2 text-sm sm:text-base">
-                                            <a href="{{ item }}" target="_blank">{{ item }}</a>
+                                        <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base w-full">
+                                            <a href="{{ item }}" target="_blank"> Open Link: {{ item }}</a>
                                         </button>
                                     </li>
                                 {% endfor %}
                             </ul>
-                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
