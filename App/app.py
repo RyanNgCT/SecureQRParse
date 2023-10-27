@@ -26,8 +26,14 @@ def allowed_file(file) -> bool:
     return detectedMimeType in ALLOWED_MIME_TYPES
 
 
+# utility function
+def defangURL(rawUrl : str) -> str:
+    return rawUrl.replace(".", "[.]").replace("http", "hxxp")
+
+# 2nd utility function
 def refangURL(rawUrl : str) -> str:
     return rawUrl.replace("hxxp", "http").replace("[.]", ".")
+
 
 @app.route('/')
 def upload_form() -> dict: # returns response object
@@ -62,7 +68,7 @@ def upload_file() -> str:
                 rawUri = refangURL(retStr)
             elif isinstance(retStr, list):
                 for element in retStr:
-                    finalStr += refangURL(element) + "\t"
+                    finalStr += element + "\t"
                     urlList.append(refangURL(element))
             return render_template('response.html', displayStr=finalStr, condition=isValidUrl, rawUri=rawUri, urlList=urlList)
         else:
