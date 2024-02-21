@@ -4,13 +4,12 @@ from pyzbar.pyzbar import decode
 from pathlib import Path
 import re
 import cv2
-from App.Components.urlRegex import uri_pattern
+from .urlRegex import uri_pattern
 
 def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
     """ based on a file, determine if whether the file contains a valid QR Code 
         and return the corresponding URL, if any, defanged. """
     
-    print(uri_pattern)
     try:
         fileExif = decode(Image.open(file))
     except PIL.UnidentifiedImageError:
