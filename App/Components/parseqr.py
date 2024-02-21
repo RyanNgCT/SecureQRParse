@@ -4,11 +4,13 @@ from pyzbar.pyzbar import decode
 from pathlib import Path
 import re
 import cv2
+from App.Components.urlRegex import uri_pattern
 
 def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
     """ based on a file, determine if whether the file contains a valid QR Code 
         and return the corresponding URL, if any, defanged. """
     
+    print(uri_pattern)
     try:
         fileExif = decode(Image.open(file))
     except PIL.UnidentifiedImageError:
@@ -26,8 +28,7 @@ def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
                 return "File either is not or does not contain valid a QR Code.", False
             else:
                 # print('cv2 decoded: ', retVal, decodedInfo[0])
-                uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
-                if re.match(uri_pattern, decodedInfo[0]): # not sure if need change index
+                if re.match(uri_pattern, decodedInfo[0]): # not sure, may need to change index
                     return defangURL(decodedInfo[0]), True
                 return "No url detected in QR Code.", False
 
@@ -37,7 +38,6 @@ def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
             for itr in range(len(fileExif)):
                 if fileExif[itr].data and fileExif[itr].type == "QRCODE":
                     rawData = fileExif[itr].data.decode()
-                    uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
                     if re.match(uri_pattern, rawData):
                         rawDataList.append(defangURL(rawData))
             if rawDataList != []:
@@ -46,7 +46,6 @@ def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
          # check type of image and if data field exists
         elif fileExif[0].type == "QRCODE" and fileExif[0].data:
             rawData = fileExif[0].data.decode()
-            uri_pattern = r"^(?:https?|hxxps?):\/\/(?:\[\.\]|\[\.\]\[\.\]|[^\[\]])+|(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?)(?:$|\s)"
             if re.match(uri_pattern, rawData):
                 return defangURL(rawData), True
             return "No url detected in QR Code.", False
@@ -54,7 +53,10 @@ def parseSingleQR(file : Path) -> (str, bool) or (list, bool):
     
 
 # utility function
-def defangURL(rawUrl : str) -> str:
+def defangURL(rawUrl : str) -> str: 
+    """
+    defangs a URL based on an input string (assumes the string is a URL itself)
+    """
     return rawUrl.replace(".", "[.]").replace("http", "hxxp")
 
 if __name__ == "__main__":
