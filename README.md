@@ -19,9 +19,16 @@ $ python parse.py [--file/-f <FILE>] [--directory/-d <DIR>] [-h/--help]
 - Flask Web App
 ```bash
 # install dependencies first
+$ cd App && flask run
+```
+
+To modify the css stylings:
+a) install Node.js on your platform: https://nodejs.org/en/download/
+
+b) run the `npx` script
+```
 $ cd App/FrontEnd
 $ npm run create-css
-$ cd ../ && flask run
 ```
 
 ### Possible To-dos
@@ -29,3 +36,7 @@ $ cd ../ && flask run
 - [x] allow for recursive search (depth > 1) when looking at files in subdirectories/subfolders, while using the `--directory` flag.
 - [x] convert and host python script as an interactive Flask Web-App.
 - [ ] security mechanisms for Flask Web-App.
+
+
+### Others
+- Reference to set-up Tailwind CSS on Flask: https://www.codewithharry.com/blogpost/using-tailwind-with-flask/
