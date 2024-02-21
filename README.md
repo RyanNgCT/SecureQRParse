@@ -23,6 +23,7 @@ $ cd App && flask run
 ```
 
 To modify the css stylings:
+
 a) install Node.js on your platform: https://nodejs.org/en/download/
 
 b) run the `npx` script

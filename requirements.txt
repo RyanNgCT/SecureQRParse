@@ -5,4 +5,5 @@ pyzbar==0.1.9
 argparse==1.4.0
 opencv-python==4.8.0.76
 Flask==2.3.3
-python-magic==0.4.27
+python-magic==0.4.27; platform_system == 'Linux'
+python-magic-bin==0.4.14; platform_system == 'Windows'
