@@ -22,7 +22,9 @@ $ python parse.py [--file/-f <FILE>] [--directory/-d <DIR>] [-h/--help]
 $ cd App && flask run
 ```
 
-To modify the css stylings:
+Note: You may need to install Visual C++ Redistributable Packages for Visual Studio 2013 [here](https://www.microsoft.com/en-US/download/details.aspx?id=40784), if you get a pyzbar dll fail to load /file not found issue
+
+##### To modify the css stylings:
 
 a) install Node.js on your platform: https://nodejs.org/en/download/
 
