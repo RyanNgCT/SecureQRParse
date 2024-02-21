@@ -1,9 +1,30 @@
 # SecureQRParse
 
-- Python Script to extract urls and defang them from QR Codes.
-- Command-Line Tool Interface _for now_ (can use `--file` or `--directory` to extract urls from a given file/directory).
+- Python Script and Web Application to extract urls and defang them from QR Codes.
 
-## Possible To-dos
+### 1. Installation of Scripts and Dependencies
+```bash
+$ git clone https://github.com/RyanNgCT/SecureQRParse
+$ cd SecureQRParse
+$ pip install -r requirements.txt # optionally create virtual env
+```
+
+### 2. Usage
+- Command-Line Tool Interface (can use `--file` or `--directory` to extract urls from a given file/directory).
+```bash
+$ cd App
+$ python parse.py [--file/-f <FILE>] [--directory/-d <DIR>] [-h/--help]
+```
+
+- Flask Web App
+```bash
+# install dependencies first
+$ cd App/FrontEnd
+$ npm run create-css
+$ cd ../ && flask run
+```
+
+### Possible To-dos
 
 - [x] allow for recursive search (depth > 1) when looking at files in subdirectories/subfolders, while using the `--directory` flag.
 - [x] convert and host python script as an interactive Flask Web-App.

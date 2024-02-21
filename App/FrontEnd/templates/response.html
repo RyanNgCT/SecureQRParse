@@ -18,7 +18,7 @@
         </script>
     </head>
     <body>
-        <h1 class="flex justify-center py-3 px-4 text-2xl font-bold underline pb-1">Result</h1>
+        <h1 class="flex justify-center py-3 px-4 text-2xl underline pb-1">Result</h1>
         <div class="flex justify-center py-3 px-4">
             <div class="italic text-center text-semibold">
                 {{ displayStr }}
@@ -37,7 +37,7 @@
                 <button onclick="toggleCollapsible()" class="w-full bg-gray-500 text-center text-white m-auto justify-center collapsible font-bold bg-downarrow top-0 left-0 bg-no-repeat">
                     Further Actions
                 </button>
-                <div class="hidden content m-auto">
+                <div class="hidden content m-auto flex">
                     <div class="justify-center bg-gray-300 p-4">
                         <div class="text-center"> <!-- Centered container for text -->
                             <p class="text-center italic text-sm sm:text-base">Do you want to proceed to visit the URL or go back?</p>
@@ -56,15 +56,11 @@
                             <button class="bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base w-full">
                                 <a href="{{ url_for('upload_form') }}">Back to Home Page</a>
                             </button>
-                            <ul>
-                                {% for item in urlList %}
-                                    <li>
-                                        <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base w-full">
-                                            <a href="{{ item }}" target="_blank"> Open Link: {{ item }}</a>
-                                        </button>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            {% for item in urlList %}
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded m-2 text-sm sm:text-base w-full">
+                                <a href="{{ item }}" target="_blank"> Open Link: {{ item }}</a>
+                            </button>
+                            {% endfor %}
                         </div>
                         {% endif %}
                     </div>
